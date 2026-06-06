@@ -1389,29 +1389,38 @@ input[type="range"]::-webkit-slider-thumb:hover {
   height: 200px;
 }
 
-.state-card-top {
+.state-card-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 8px;
   margin-bottom: 12px;
 }
 
-.state-name-wrapper {
+.state-name-row {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .state-name {
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--text-primary);
+  white-space: nowrap;
 }
 
 .state-abbr {
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
+}
+
+.state-badges-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .state-hours-badge {

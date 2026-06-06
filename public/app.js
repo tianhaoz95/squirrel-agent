@@ -553,12 +553,12 @@ function renderStates(list) {
   grid.innerHTML = list.map(s => `
     <div class="card glass-card state-card">
       <div>
-        <div class="state-card-top">
-          <div class="state-name-wrapper">
+        <div class="state-card-header">
+          <div class="state-name-row">
             <span class="state-name">${s.name}</span>
             <span class="state-abbr">${s.abbr}</span>
           </div>
-          <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+          <div class="state-badges-row">
             <span class="state-hours-badge">${s.hours} Hrs</span>
             <span class="transfer-badge ${s.difficulty}">${s.difficultyLabel}</span>
           </div>
