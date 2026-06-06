@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupCalculator();
   setupBrokerComparison();
   setupStateSearch();
+  setupReciprocityCalculator();
   setupResetButton();
   
   // Initial Rendering
@@ -582,4 +583,433 @@ function formatCurrency(num) {
 
 function formatNumber(num) {
   return num.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+// 6. Reciprocity Calculator
+function setupReciprocityCalculator() {
+  const homeSelect = document.getElementById("reciprocity-home-state");
+  const targetSelect = document.getElementById("reciprocity-target-state");
+  
+  if (!homeSelect || !targetSelect) return;
+  
+  // Sort states alphabetically for presentation
+  const sortedStates = [...statesData].sort((a, b) => a.name.localeCompare(b.name));
+  
+  // Populate dropdowns
+  const optionsHTML = sortedStates.map(s => `<option value="${s.abbr}">${s.name} (${s.abbr})</option>`).join('');
+  homeSelect.innerHTML = optionsHTML;
+  targetSelect.innerHTML = optionsHTML;
+  
+  // Set defaults: Home = CA, Target = TX
+  homeSelect.value = "CA";
+  targetSelect.value = "TX";
+  
+  // Handle change events
+  const handleChange = () => {
+    updateReciprocityResult(homeSelect.value, targetSelect.value);
+  };
+  
+  homeSelect.addEventListener("change", handleChange);
+  targetSelect.addEventListener("change", handleChange);
+  
+  // Initial run
+  handleChange();
+}
+
+function updateReciprocityResult(homeAbbr, targetAbbr) {
+  const resultContainer = document.getElementById("reciprocity-result");
+  if (!resultContainer) return;
+  
+  const homeStateObj = statesData.find(s => s.abbr === homeAbbr);
+  const targetStateObj = statesData.find(s => s.abbr === targetAbbr);
+  
+  if (!homeStateObj || !targetStateObj) return;
+  
+  const advice = getReciprocityAdvice(homeAbbr, targetAbbr);
+  
+  // Determine color class and badges
+  let statusClass = "status-none";
+  let badgeClass = "badge-none";
+  let iconName = "alert-circle";
+  
+  if (advice.type === "full") {
+    statusClass = "status-full";
+    badgeClass = "badge-full";
+    iconName = "check-circle";
+  } else if (advice.type === "partial") {
+    statusClass = "status-partial";
+    badgeClass = "badge-partial";
+    iconName = "help-circle";
+  }
+  
+  // Render html
+  resultContainer.className = `reciprocity-result-card mt-6 ${statusClass}`;
+  resultContainer.innerHTML = `
+    <div class="result-status-header">
+      <span class="status-badge ${badgeClass}">${advice.status}</span>
+      <h4 style="font-weight: 700; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 8px;">
+        <i data-lucide="${iconName}"></i>
+        ${homeStateObj.name} to ${targetStateObj.name}
+      </h4>
+    </div>
+    <div class="result-summary-text">${advice.summary}</div>
+    
+    <div class="compliance-steps-title">Compliance Instructions</div>
+    <ol class="compliance-steps">
+      ${advice.steps.map((step, idx) => `
+        <li class="compliance-step-item">
+          <span class="compliance-step-number">${idx + 1}</span>
+          ${step}
+        </li>
+      `).join('')}
+    </ol>
+  `;
+  
+  // Reinitialize lucide icons inside results
+  lucide.createIcons();
+}
+
+function getReciprocityAdvice(home, target) {
+  if (home === target) {
+    return {
+      status: "Same State",
+      type: "full",
+      summary: "You are looking up reciprocity requirements within your home state.",
+      steps: [
+        `You already hold an active license in ${home}.`,
+        "Refer to the state directory search below for direct board links and standard maintenance guidelines."
+      ]
+    };
+  }
+  
+  // 1. Target is California (No reciprocity at all)
+  if (target === "CA") {
+    return {
+      status: "No Reciprocity",
+      type: "none",
+      summary: "California does not offer reciprocity or waivers of any kind to out-of-state licensees.",
+      steps: [
+        "Complete the 135 hours of approved pre-licensing courses (Real Estate Principles, Practice, and one elective).",
+        "Pass the full 150-question California Salesperson Exam (70% passing score).",
+        "Complete the fingerprint background check via Live Scan in California.",
+        "Submit the Combined Salesperson Exam and License Application with required fees ($305).",
+        "Submit an Out-of-State Consent to Service of Process form (since your residency is outside California)."
+      ]
+    };
+  }
+  
+  // 2. Target is Texas (No reciprocity, but waives national exam)
+  if (target === "TX") {
+    return {
+      status: "Education Waiver / State-Only Exam",
+      type: "partial",
+      summary: "Texas does not offer direct reciprocity, but active licensees of any state can waive the National portion of the Texas licensing exam.",
+      steps: [
+        "Complete the 180 hours of TREC-approved pre-licensing education (6 specific 30-hour courses).",
+        "Submit the Out-of-State License Application to TREC ($150) and complete fingerprinting ($38.25).",
+        "TREC will review your out-of-state license history and issue a waiver for the National exam portion.",
+        "Schedule and pass the Texas State-specific licensing exam (30 questions) with Pearson VUE.",
+        "Submit an active sponsoring broker agreement to TREC to activate your Texas license."
+      ]
+    };
+  }
+  
+  // 3. Target is Colorado (Direct exam-only reciprocity for any state)
+  if (target === "CO") {
+    return {
+      status: "Full Reciprocity",
+      type: "full",
+      summary: "Colorado allows active real estate licensees from any state to get licensed by taking only the state-specific exam.",
+      steps: [
+        "Obtain a certified License History from your home state board showing an active, clean license.",
+        "Waive all pre-licensing education (exempt from Colorado's 168-hour course).",
+        "Schedule and pass the Colorado State-specific Broker Exam (40 questions, administered by Pearson VUE).",
+        "Submit your fingerprints to the Colorado Bureau of Investigation for a background check.",
+        "Secure Error & Omissions (E&O) insurance.",
+        "Submit your license application online ($200) with your license history and E&O proof."
+      ]
+    };
+  }
+  
+  // 4. Target is Virginia (Direct exam-only reciprocity for any state)
+  if (target === "VA") {
+    return {
+      status: "Full Reciprocity",
+      type: "full",
+      summary: "Virginia allows active real estate licensees from any state to get licensed by taking only the state-specific exam.",
+      steps: [
+        "Obtain a certified Certification of Licensure from your home state (issued within the last 60 days).",
+        "Waive all pre-licensing education (exempt from Virginia's 60-hour course).",
+        "Schedule and pass the Virginia State-specific Salesperson Exam (40 questions, administered by PSI).",
+        "Get fingerprinted at a PSI testing center for the background check.",
+        "Submit the Reciprocal Salesperson License Application with the application fee ($170)."
+      ]
+    };
+  }
+  
+  // 5. Target is Florida (Mutual recognition with CO, GA, IL in our list)
+  if (target === "FL") {
+    const mutualStates = ["CO", "GA", "IL"];
+    if (mutualStates.includes(home)) {
+      return {
+        status: "Mutual Recognition",
+        type: "full",
+        summary: "Florida has a Mutual Recognition agreement with your home state, granting a full education waiver and state-only exam path.",
+        steps: [
+          "Obtain a certified License History from your home state board.",
+          "Waive all Florida pre-licensing courses (exempt from the 63-hour course).",
+          "Submit a Salesperson application to the Florida DBPR ($83.75) and complete electronic fingerprinting ($50-$60).",
+          "Register for and pass the Florida-specific Law Exam (40 questions, score 30/40 or higher).",
+          "Your license will be issued on active status if sponsored by an active Florida broker."
+        ]
+      };
+    } else {
+      return {
+        status: "No Reciprocity",
+        type: "none",
+        summary: "Florida does not recognize your home state license. You must complete the standard process.",
+        steps: [
+          "Complete the Florida 63-hour Sales Associate Pre-licensing Course.",
+          "Submit the application to DBPR ($83.75) and complete electronic fingerprinting.",
+          "Pass both portions (National and Florida State-specific) of the Florida Real Estate Sales Associate Exam."
+        ]
+      };
+    }
+  }
+  
+  // 6. Target is Georgia (Direct reciprocity for any state)
+  if (target === "GA") {
+    return {
+      status: "Full Reciprocity",
+      type: "full",
+      summary: "Georgia offers direct reciprocity to all states. No courses or exams are required if you hold an active license in good standing.",
+      steps: [
+        "Obtain a certified Certification of License History from your home state board.",
+        "Complete the Georgia Crime Information Center (GCIC) background check report.",
+        "Submit the Out-of-State License Reciprocity Application to the Georgia Real Estate Commission (GREC) with the fee ($170).",
+        "Provide a consent to service of process form (non-resident agreement).",
+        "A reciprocal Georgia license will be issued directly without any exams or education."
+      ]
+    };
+  }
+  
+  // 7. Target is Illinois (Mutual recognition with CO, FL, GA in our list)
+  if (target === "IL") {
+    const mutualStates = ["CO", "FL", "GA"];
+    if (mutualStates.includes(home)) {
+      return {
+        status: "Mutual Recognition",
+        type: "full",
+        summary: "Illinois has a reciprocity agreement with your home state, enabling a state-only exam path.",
+        steps: [
+          "Request a Certificate of Active Licensure in Good Standing from your home state board.",
+          "Submit the Broker License by Reciprocity Application to the IDFPR.",
+          "Schedule and pass the Illinois state-specific portion of the Broker Exam.",
+          "Submit a fingerprint background check and pay the license fee."
+        ]
+      };
+    } else {
+      return {
+        status: "No Reciprocity",
+        type: "none",
+        summary: "Illinois does not recognize your home state license. You must follow the standard broker path.",
+        steps: [
+          "Complete the 75-hour Illinois Broker Pre-licensing Education.",
+          "Schedule and pass both portions (National and State) of the Illinois Broker licensing exam.",
+          "Submit a fingerprint background check and apply for the license online."
+        ]
+      };
+    }
+  }
+  
+  // 8. Target is New York (Reciprocity with CO, GA, MA, PA in our list)
+  if (target === "NY") {
+    const reciprocalStates = ["CO", "GA", "MA", "PA"];
+    if (reciprocalStates.includes(home)) {
+      return {
+        status: "Mutual Reciprocity",
+        type: "full",
+        summary: "New York offers direct reciprocity with your home state. No exam or course is required.",
+        steps: [
+          "Obtain a certified License History from your home state board.",
+          "Submit an irrevocable Out-of-State Consent to Service of Process form (DOS-1579).",
+          "Submit the New York Salesperson application online via the eAccessNY portal with the fee ($65).",
+          "Your New York license will be issued directly; no courses or exams are required."
+        ]
+      };
+    } else {
+      return {
+        status: "Education Waiver / Full Exam",
+        type: "partial",
+        summary: "New York does not have standard reciprocity with your state, but allows you to apply for an education waiver.",
+        steps: [
+          "Obtain a certified License History from your home state.",
+          "Submit the Out-of-State Education Waiver Request form to the NYS Division of Licensing Services.",
+          "Once approved (waiving the 77-hour course), schedule and pass the New York Salesperson Exam (75 questions).",
+          "Submit the salesperson application online via eAccessNY ($65)."
+        ]
+      };
+    }
+  }
+  
+  // 9. Target is North Carolina (Education & National Exam waiver for any state)
+  if (target === "NC") {
+    return {
+      status: "Education Waiver / State-Only Exam",
+      type: "partial",
+      summary: "North Carolina offers an exam-only path for active licensees of any state, waiving the pre-licensing education.",
+      steps: [
+        "Submit an application to the NCREC demonstrating an active license in good standing in your home state.",
+        "NCREC will approve a waiver of the 75-hour pre-licensing course and the National exam portion.",
+        "Schedule and pass the North Carolina State-specific portion of the Broker Exam.",
+        "Receive a NC Provisional Broker license. To remove provisional status, complete the 90 hours of post-licensing education within 18 months."
+      ]
+    };
+  }
+  
+  // 10. Target is Ohio (Reciprocity with CO in our list)
+  if (target === "OH") {
+    if (home === "CO") {
+      return {
+        status: "Reciprocity",
+        type: "full",
+        summary: "Ohio has a reciprocity agreement with Colorado, waiving education requirements.",
+        steps: [
+          "Obtain a Letter of Good Standing from the Colorado Division of Real Estate.",
+          "Submit the Ohio Reciprocal Salesperson Application and a Consent to Service of Process form.",
+          "Schedule and pass the Ohio state-specific licensing exam.",
+          "Pay the license fee to issue your Ohio license."
+        ]
+      };
+    } else {
+      return {
+        status: "No Reciprocity",
+        type: "none",
+        summary: "Ohio does not recognize your home state license. Full education and exams are required.",
+        steps: [
+          "Complete the 120-hour Ohio pre-licensing education (4 courses: Principles, Law, Finance, Appraisal).",
+          "Submit the Salesperson Exam Application with the Ohio Division of Real Estate ($81).",
+          "Pass both portions (National and State) of the Ohio Real Estate Exam."
+        ]
+      };
+    }
+  }
+  
+  // 11. Target is Washington (Education waiver for active out-of-state license)
+  if (target === "WA") {
+    return {
+      status: "Education Waiver / State-Only Exam",
+      type: "partial",
+      summary: "Washington waives pre-licensing education if you have an active license in another state.",
+      steps: [
+        "Obtain a certified License History from your home state board.",
+        "Submit the history and a request for exam waiver to the Washington Department of Licensing.",
+        "Upon approval, register for and pass the Washington State-specific exam (40 questions).",
+        "Complete a fingerprint background check and submit your WA license application ($223)."
+      ]
+    };
+  }
+  
+  // 12. Target is Arizona (Out-of-state recognition for 1+ year active license)
+  if (target === "AZ") {
+    return {
+      status: "Out-of-State Recognition",
+      type: "partial",
+      summary: "Arizona offers out-of-state license recognition if you have been licensed in your home state for at least 1 year.",
+      steps: [
+        "Verify your home state license has been active for at least 12 out of the last 24 months.",
+        "Obtain a certified License History from your home state board.",
+        "Apply for and obtain an Arizona Fingerprint Clearance Card (background check).",
+        "Complete a 6-hour Arizona Contract Writing Course.",
+        "Schedule and pass the Arizona State-specific licensing exam (National portion is waived).",
+        "Submit the Out-of-State License Recognition Application to ADRE."
+      ]
+    };
+  }
+  
+  // 13. Target is Pennsylvania (Reciprocity with GA, MA, NY in our list)
+  if (target === "PA") {
+    const reciprocalStates = ["GA", "MA", "NY"];
+    if (reciprocalStates.includes(home)) {
+      return {
+        status: "Mutual Reciprocity",
+        type: "full",
+        summary: "Pennsylvania has a direct reciprocal agreement with your home state, issuing a license directly.",
+        steps: [
+          "Obtain a certified License History from your home state board.",
+          "Submit the PA Reciprocal Salesperson Application online via the PALS system ($117).",
+          "Submit a recent criminal background check from your home state.",
+          "A reciprocal Pennsylvania license will be issued directly with no courses or exams required."
+        ]
+      };
+    } else {
+      return {
+        status: "No Reciprocity",
+        type: "none",
+        summary: "Pennsylvania does not recognize your home state license. Full process required.",
+        steps: [
+          "Complete the 75 hours of Pennsylvania pre-licensing education.",
+          "Schedule and pass both portions (National & Pennsylvania State) of the licensing exam.",
+          "Submit a background check and apply for your license online."
+        ]
+      };
+    }
+  }
+  
+  // 14. Target is Michigan (Education waiver, must pass exam)
+  if (target === "MI") {
+    return {
+      status: "Education Waiver / Full Exam",
+      type: "partial",
+      summary: "Michigan does not offer direct reciprocity, but waives the 40-hour pre-licensing course for active licensees.",
+      steps: [
+        "Obtain a certified License History from your home state board.",
+        "Submit the license application online via LARA ($88) to receive your course waiver approval.",
+        "Schedule and pass the full Michigan Real Estate Salesperson Exam (115 questions).",
+        "Once passed, LARA will automatically issue your salesperson license."
+      ]
+    };
+  }
+  
+  // 15. Target is Massachusetts (Reciprocity with CO, GA, NY, PA in our list)
+  if (target === "MA") {
+    const reciprocalStates = ["CO", "GA", "NY", "PA"];
+    if (reciprocalStates.includes(home)) {
+      return {
+        status: "Mutual Reciprocity",
+        type: "full",
+        summary: "Massachusetts offers direct reciprocity with your home state. No exam or course is required.",
+        steps: [
+          "Obtain a certified License History from your home state board.",
+          "Complete the MA Education Waiver/Reciprocity Application.",
+          "Submit three character references (letters of recommendation) and a CORI authorization form.",
+          "Pay the reciprocal fee and receive your Massachusetts license without taking any courses or exams."
+        ]
+      };
+    } else {
+      return {
+        status: "Education Waiver / Full Exam",
+        type: "partial",
+        summary: "Massachusetts does not have reciprocity with your state, but waives the 40-hour course.",
+        steps: [
+          "Obtain a certified License History from your home state.",
+          "Submit the Education Waiver Application to the MA Board of Registration.",
+          "Upon approval, schedule and pass the full Massachusetts Real Estate Exam.",
+          "Pay the licensing fee to receive your active license."
+        ]
+      };
+    }
+  }
+  
+  // Default fallback
+  return {
+    status: "No Reciprocity",
+    type: "none",
+    summary: `No formal reciprocal agreement exists between ${home} and ${target}.`,
+    steps: [
+      `Contact the ${target} Real Estate Board/Commission for potential course waiver approvals.`,
+      `Complete the pre-licensing courses required by ${target}.`,
+      `Pass the licensing exam in ${target}.`
+    ]
+  };
 }

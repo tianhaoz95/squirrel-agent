@@ -913,44 +913,43 @@
         
         <p class="section-intro">Hours and requirements vary significantly by state. Use this lookup tool to find pre-licensing education requirements and licensing portals.</p>
         
-        <!-- Cross-State Reciprocity Section -->
-        <div class="reciprocity-container glass-card mb-8">
+        <!-- Cross-State Reciprocity Calculator -->
+        <div class="reciprocity-calculator-container glass-card mb-8">
           <div class="reciprocity-header">
-            <div class="card-icon"><i data-lucide="shuffle"></i></div>
+            <div class="card-icon"><i data-lucide="arrow-right-left"></i></div>
             <h3>Cross-State Licensing & Reciprocity</h3>
           </div>
-          <p class="mb-4">If you live in one state but purchase investment properties in another, managing your licenses across state lines is key. Here is how reciprocity works, with a focus on California (CA) and Texas (TX):</p>
+          <p class="mb-6">Select your licensed home state and the target transaction state where you plan to acquire investment properties to view compliance requirements and instructions.</p>
           
-          <div class="reciprocity-split">
-            <!-- CA & TX Specifics -->
-            <div class="reciprocity-column border-right">
-              <h4 class="text-primary"><i data-lucide="arrow-right-left"></i> The CA-TX Border (No Reciprocity)</h4>
-              <p class="reciprocity-info-text">Neither California nor Texas offers reciprocity. To practice in both, you must apply as a new applicant in each state. However, there is one key exam exemption:</p>
-              <ul class="reciprocity-bullets">
-                <li><strong>California Agent getting licensed in Texas:</strong> Texas requires you to complete the 180 hours of education, but allows you to <strong>waive the National portion</strong> of the Texas licensing exam. You only take the Texas State exam.</li>
-                <li><strong>Texas Agent getting licensed in California:</strong> California does not grant any waivers. You must complete the 135 hours of education and pass the entire 150-question California exam.</li>
-                <li><strong>Residency:</strong> Neither state requires local residency. You can apply as a non-resident by submitting an Out-of-State Consent to Service of Process form.</li>
-              </ul>
-            </div>
-            
-            <!-- General Map -->
-            <div class="reciprocity-column">
-              <h4 class="text-secondary"><i data-lucide="globe"></i> National Reciprocity Categories</h4>
-              <div class="reciprocity-categories">
-                <div class="category-block">
-                  <span class="category-badge success">Full Reciprocity</span>
-                  <p>Transfer easily with a state-law exam. (e.g., Colorado, Virginia, Alabama, Mississippi)</p>
-                </div>
-                <div class="category-block">
-                  <span class="category-badge warning">Partial Reciprocity</span>
-                  <p>Reciprocal agreements only exist between specific states. (e.g., Florida, Georgia, Illinois)</p>
-                </div>
-                <div class="category-block">
-                  <span class="category-badge error">No Reciprocity</span>
-                  <p>No recognition of out-of-state licenses. Full course and exams required. (e.g., California, Texas, New York)</p>
-                </div>
+          <div class="reciprocity-selectors">
+            <div class="selector-group">
+              <label for="reciprocity-home-state">Licensed Home State</label>
+              <div class="select-wrapper">
+                <i data-lucide="home" class="select-icon"></i>
+                <select id="reciprocity-home-state" class="calc-select">
+                  <!-- Will be dynamically populated by JS -->
+                </select>
               </div>
             </div>
+            
+            <div class="selector-arrow">
+              <i data-lucide="arrow-right"></i>
+            </div>
+            
+            <div class="selector-group">
+              <label for="reciprocity-target-state">Target Transaction State</label>
+              <div class="select-wrapper">
+                <i data-lucide="globe" class="select-icon"></i>
+                <select id="reciprocity-target-state" class="calc-select">
+                  <!-- Will be dynamically populated by JS -->
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Reciprocity Dynamic Result Card -->
+          <div id="reciprocity-result" class="reciprocity-result-card mt-6">
+            <!-- Will be dynamically populated by JS -->
           </div>
         </div>
         
