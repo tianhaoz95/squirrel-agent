@@ -7,8 +7,8 @@
   </defs>
   <!-- Rounded Background Container -->
   <rect width="32" height="32" rx="8" fill="url(#logoGrad)" />
-  <!-- Squirrel Icon centered, scaled and colored white -->
-  <g transform="translate(4, 4)" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+  <!-- Squirrel Icon centered, scaled and colored white to match sidebar ratio -->
+  <g transform="translate(7, 7) scale(0.75)" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
     <path d="M18 10h-2.18A4.8 4.8 0 0 0 11 5a3 3 0 1 0 0 6h5.82a2 2 0 1 1 0 4h-2.18"/>
     <path d="M14 17a4.67 4.67 0 0 1-2.92 2.5"/>
     <path d="M11 10c0 1.66-1.34 3-3 3a3 3 0 0 1-3-3 3 3 0 0 1 3-3"/>
