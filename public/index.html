@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SquirrelAgent: Investor-Agent Licensing Curriculum</title>
+  <meta name="description" content="An interactive, step-by-step curriculum and resource kit to get your real estate license to save commissions on your own home and rental property purchases.">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=1.0.2">
+  <link rel="stylesheet" href="styles.css?v=1.0.3">
+</head>
+<body class="dark-theme">
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-container" onclick="goToHome()" role="button" tabindex="0">
+          <div class="logo-icon">
+            <i data-lucide="squirrel"></i>
+          </div>
+          <div class="logo-text">
+            <span class="logo-title">SquirrelAgent</span>
+            <span class="logo-subtitle">Commission Stash</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Progress Panel -->
+      <div class="progress-panel">
+        <div class="progress-info">
+          <span class="progress-label">Total Progress</span>
+          <span class="progress-percentage" id="global-progress-percent">0%</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="global-progress-bar"></div>
+        </div>
+        <div class="progress-stats">
+          <span id="global-progress-count">0 of 0 tasks completed</span>
+        </div>
+        <div class="progress-time-stats">
+          <div class="time-stat-item">
+            <span class="time-stat-label">Time Spent</span>
+            <span class="time-stat-value completed" id="global-time-spent">0 hrs</span>
+          </div>
+          <div class="time-stat-item">
+            <span class="time-stat-label">Time Left</span>
+            <span class="time-stat-value remaining" id="global-time-remaining">252 hrs</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Nav Menu -->
+      <nav class="nav-menu" aria-label="Main Navigation">
+        <ul class="nav-list">
+          <li class="nav-item">
+            <button class="nav-link active" data-tab="dashboard" aria-current="page">
+              <i data-lucide="layout-dashboard"></i>
+              <span>Dashboard</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-tab="curriculum">
+              <i data-lucide="book-open"></i>
+              <span>Curriculum Roadmap</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-tab="calculator">
+              <i data-lucide="calculator"></i>
+              <span>Savings Calculator</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-tab="broker-compare">
+              <i data-lucide="users"></i>
+              <span>Broker Interview</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-tab="state-guide">
+              <i data-lucide="map"></i>
+              <span>State Requirements</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" data-tab="resources">
+              <i data-lucide="link"></i>
+              <span>Resources</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+      
+      <!-- Footer Info -->
+      <div class="sidebar-footer">
+        <div class="author-card">
+          <div class="author-info">
+            <span class="author-name">Personal Roadmap</span>
+            <span class="author-status">From Zero to Agent</span>
+          </div>
+          <button class="reset-btn" id="reset-progress-btn" title="Reset All Progress">
+            <i data-lucide="rotate-ccw"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Mobile Header / Top Bar -->
+    <header class="mobile-header">
+      <div class="logo-container" onclick="goToHome()" role="button" tabindex="0">
+        <div class="logo-icon">
+          <i data-lucide="squirrel"></i>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">SquirrelAgent</span>
+        </div>
+      </div>
+      <button class="menu-toggle" id="menu-toggle-btn" aria-label="Toggle Menu">
+        <i data-lucide="menu"></i>
+      </button>
+    </header>
+    
+    <!-- Mobile Navigation Drawer Overlay -->
+    <div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
+    
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Tab: Dashboard -->
+      <section id="tab-dashboard" class="tab-panel active">
+        <div class="dashboard-hero">
+          <div class="hero-content">
+            <span class="badge">SQUIRRELAGENT ROADMAP</span>
+            <h1>Unlock Unlimited Savings on Real Estate Transactions</h1>
+            <p>Skip the middleman, gain direct MLS database access, represent yourself in transactions, and rebate thousands of dollars back to your own pocket.</p>
+            <div class="hero-actions">
+              <button class="btn btn-primary" onclick="switchTab('curriculum')">
+                <span>Start Learning</span>
+                <i data-lucide="arrow-right"></i>
+              </button>
+              <button class="btn btn-secondary" onclick="switchTab('calculator')">
+                <span>Calculate Savings</span>
+                <i data-lucide="dollar-sign"></i>
+              </button>
+            </div>
+          </div>
+          <div class="hero-stat-card glass-card">
+            <div class="stat-icon-wrapper">
+              <i data-lucide="trending-up"></i>
+            </div>
+            <div class="stat-value" id="dashboard-est-savings">$9,000</div>
+            <div class="stat-label">Estimated Net Savings on 1st Deal</div>
+            <div class="stat-helper">Based on a $400k home and 2.5% commission</div>
+          </div>
+        </div>
+        
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+          <!-- Card 1: Core Strategy -->
+          <div class="card glass-card">
+            <div class="card-header">
+              <div class="card-icon"><i data-lucide="target"></i></div>
+              <h3>The SquirrelAgent Hack</h3>
+            </div>
+            <div class="card-body">
+              <p>Getting your real estate license is not just for full-time agents. For active real estate investors or home buyers purchasing primary residences and rental properties, it acts as a massive financial accelerator:</p>
+              <ul class="benefit-list">
+                <li><i data-lucide="check-circle" class="benefit-check"></i> <strong>Save 2.5% – 3% Commission:</strong> Keep the buyer's agent fee on your own purchases or apply it as a closing cost credit.</li>
+                <li><i data-lucide="check-circle" class="benefit-check"></i> <strong>Direct MLS Database Access:</strong> Analyze markets, pull comps, and view historical property data in real-time.</li>
+                <li><i data-lucide="check-circle" class="benefit-check"></i> <strong>Tour Homes Instantly:</strong> Set up showings on your own schedule without waiting for a third-party agent.</li>
+                <li><i data-lucide="check-circle" class="benefit-check"></i> <strong>Write Your Own Offers:</strong> Draft contracts and negotiate terms directly with listing agents.</li>
+              </ul>
+            </div>
+          </div>
+          
+          <!-- Card 2: Next Steps -->
+          <div class="card glass-card">
+            <div class="card-header">
+              <div class="card-icon"><i data-lucide="compass"></i></div>
+              <h3>Your Current Milestone</h3>
+            </div>
+            <div class="card-body milestone-card-body">
+              <div id="current-milestone-content">
+                <!-- Will be dynamically populated by JS -->
+                <p>Loading your current status...</p>
+              </div>
+              <button class="btn btn-outline btn-full-width" onclick="switchTab('curriculum')">
+                View Checklist
+              </button>
+            </div>
+          </div>
+          
+          <!-- Card 3: Financial Summary -->
+          <div class="card glass-card">
+            <div class="card-header">
+              <div class="card-icon"><i data-lucide="piggy-bank"></i></div>
+              <h3>Cost-Benefit Overview</h3>
+            </div>
+            <div class="card-body">
+              <div class="cost-summary-list">
+                <div class="cost-summary-item">
+                  <span class="cost-summary-label">Average Startup Cost (Year 1)</span>
+                  <span class="cost-summary-val text-warning">~$2,500</span>
+                </div>
+                <div class="cost-summary-item">
+                  <span class="cost-summary-label">Average Annual Upkeep (Year 2+)</span>
+                  <span class="cost-summary-val text-error">~$1,800</span>
+                </div>
+                <div class="cost-summary-item border-top">
+                  <span class="cost-summary-label">Commission Saved ($400k purchase)</span>
+                  <span class="cost-summary-val text-success">+$10,000</span>
+                </div>
+                <div class="cost-summary-item">
+                  <span class="cost-summary-label">Net First-Year Savings</span>
+                  <span class="cost-summary-val text-primary" id="dashboard-net-savings">+$7,500</span>
+                </div>
+              </div>
+              <p class="summary-disclaimer"><i data-lucide="alert-circle"></i> Requires joining an investor-friendly 100% commission brokerage.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Tab: Curriculum -->
+      <section id="tab-curriculum" class="tab-panel">
+        <div class="section-header">
+          <div>
+            <span class="badge">ROADMAP</span>
+            <h2>Your Interactive Curriculum</h2>
+          </div>
+          <div class="section-actions" style="display: flex; gap: 8px; align-items: center;">
+            <span class="roadmap-counter" id="roadmap-counter">0 of 0 Completed</span>
+            <span class="roadmap-time-counter" id="roadmap-time-counter">252 hrs left</span>
+          </div>
+        </div>
+        
+        <p class="section-intro">Follow these 7 phases sequentially to earn your license, set up your business, and execute your first commission-saving transaction.</p>
+        
+        <!-- Accordion Curriculum Group -->
+        <div class="curriculum-accordion">
+          <!-- Phase 1 -->
+          <details class="phase-disclosure" name="curriculum-phases" open>
+            <summary class="phase-summary">
+              <div class="phase-summary-left">
+                <div class="phase-badge">Phase 1</div>
+                <span class="phase-title">Meet Eligibility & Pre-Licensing Education</span>
+              </div>
+              <div class="phase-summary-right">
+                <span class="phase-time-badge" id="p1-time-left">138 hrs left</span>
+                <span class="phase-progress-text" id="p1-progress">0/3</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </summary>
+            <div class="phase-content">
+              <p class="phase-desc">Complete your state-required education hours through an accredited provider. This forms the foundation of real estate law, math, and contracts.</p>
+              
+              <ul class="task-list" data-phase="1">
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p1-t1" data-duration="1">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Verify Basic Eligibility:</strong> Confirm you are 18+ years old, hold a high school diploma or GED, and are legally eligible to work in the US. <span class="task-duration-label">1 hr</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p1-t2" data-duration="2">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Choose an Approved Course Provider:</strong> Enroll in a state-approved online school. Recommended providers include: <span class="task-duration-label">2 hrs</span>
+                      <span class="sub-links">
+                        <a href="https://www.theceshop.com/" target="_blank" rel="noopener">The CE Shop</a> (High pass rates), 
+                        <a href="https://www.aceableagent.com/" target="_blank" rel="noopener">AceableAgent</a> (Great app), or 
+                        <a href="https://www.colibrirealestate.com/" target="_blank" rel="noopener">Colibri</a> (Budget friendly).
+                      </span>
+                    </span>
+                  </label>
+                </li>
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p1-t3" data-duration="135">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Complete Required Hours & Pass Course Finals:</strong> Devote 1-2 hours daily to finish the coursework. Real estate concepts include property ownership, land-use controls, valuation, financing, and agency relationships. Pass the course proctored final exams. <span class="task-duration-label">135 hrs</span>
+                    </span>
+                  </label>
+                </li>
+              </ul>
+            </div>
+          </details>
+
+          <!-- Phase 2 -->
+          <details class="phase-disclosure" name="curriculum-phases">
+            <summary class="phase-summary">
+              <div class="phase-summary-left">
+                <div class="phase-badge">Phase 2</div>
+                <span class="phase-title">Exam Prep & Passing the Licensing Exam</span>
+              </div>
+              <div class="phase-summary-right">
+                <span class="phase-time-badge" id="p2-time-left">30 hrs left</span>
+                <span class="phase-progress-text" id="p2-progress">0/3</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </summary>
+            <div class="phase-content">
+              <p class="phase-desc">Study the specific regulations of your state and practice common exam questions to pass the state examination on your first attempt.</p>
+              
+              <ul class="task-list" data-phase="2">
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p2-t1" data-duration="10">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Study Real Estate Math:</strong> Master formulas for calculating commissions, loan-to-value (LTV), property taxes, down payments, interest rates, and capitalization rates (Cap Rate = NOI / Value). <span class="task-duration-label">10 hrs</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p2-t2" data-duration="15">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Take 5+ Full Practice Exams:</strong> Mimic testing conditions (timed, no notes). Aim for a consistent score of 80%+ on practice exams before taking the official exam. <span class="task-duration-label">15 hrs</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p2-t3" data-duration="5">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Schedule and Pass the Official Exam:</strong> Register online with the state exam administrator (usually PSI or Pearson VUE). Bring two forms of ID. The test has two portions: National (general concepts) and State (local laws). <span class="task-duration-label">5 hrs</span>
+                    </span>
+                  </label>
+                </li>
+              </ul>
+            </div>
+          </details>
+
+          <!-- Phase 3 -->
+          <details class="phase-disclosure" name="curriculum-phases">
+            <summary class="phase-summary">
+              <div class="phase-summary-left">
+                <div class="phase-badge">Phase 3</div>
+                <span class="phase-title">Background Check & License Application</span>
+              </div>
+              <div class="phase-summary-right">
+                <span class="phase-time-badge" id="p3-time-left">4 hrs left</span>
+                <span class="phase-progress-text" id="p3-progress">0/2</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </summary>
+            <div class="phase-content">
+              <p class="phase-desc">Fulfill administrative requirements to submit your official license application to the state regulatory board.</p>
+              
+              <ul class="task-list" data-phase="3">
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p3-t1" data-duration="2">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Complete Fingerprinting & Background Check:</strong> Schedule fingerprinting with a state-approved vendor (e.g., IdentoGO) to verify your criminal history. <span class="task-duration-label">2 hrs</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p3-t2" data-duration="2">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Submit the License Application Online:</strong> File the application through your state's Real Estate Commission portal and pay the state licensing fee. <span class="task-duration-label">2 hrs</span>
+                    </span>
+                  </label>
+                </li>
+              </ul>
+            </div>
+          </details>
+
+          <!-- Phase 4 -->
+          <details class="phase-disclosure" name="curriculum-phases">
+            <summary class="phase-summary">
+              <div class="phase-summary-left">
+                <div class="phase-badge">Phase 4</div>
+                <span class="phase-title">Select Sponsoring Brokerage (Critical Step)</span>
+              </div>
+              <div class="phase-summary-right">
+                <span class="phase-time-badge" id="p4-time-left">10 hrs left</span>
+                <span class="phase-progress-text" id="p4-progress">0/3</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </summary>
+            <div class="phase-content">
+              <p class="phase-desc">As a new agent, you must affiliate with a sponsoring broker. Choose a brokerage that charges a flat fee rather than a percentage-based split, which is critical for protecting your investment margins.</p>
+              
+              <ul class="task-list" data-phase="4">
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p4-t1" data-duration="2">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Understand Split vs. Flat-Fee Models:</strong> Avoid traditional brokerages (e.g., Keller Williams) that take 30-40% of your commission. Target 100% commission brokerages that charge a flat fee (e.g., $300-$500) per transaction. <span class="task-duration-label">2 hrs</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p4-t2" data-duration="6">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Interview 3 Brokerages:</strong> Ask specifically about their "Personal Transaction Policy" (many let you keep 100% on 1-2 personal deals/year) and confirm they allow part-time agents with no transaction minimums. <span class="task-duration-label">6 hrs</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p4-t3" data-duration="2">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Submit Sponsorship Request:</strong> Once selected, have the broker sign the sponsorship portion of your state licensing application to officially activate your license. <span class="task-duration-label">2 hrs</span>
+                    </span>
+                  </label>
+                </li>
+              </ul>
+            </div>
+          </details>
+
+          <!-- Phase 5 -->
+          <details class="phase-disclosure" name="curriculum-phases">
+            <summary class="phase-summary">
+              <div class="phase-summary-left">
+                <div class="phase-badge">Phase 5</div>
+                <span class="phase-title">Join Realtor Board & Get MLS Access</span>
+              </div>
+              <div class="phase-summary-right">
+                <span class="phase-time-badge" id="p5-time-left">5 hrs left</span>
+                <span class="phase-progress-text" id="p5-progress">0/3</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </summary>
+            <div class="phase-content">
+              <p class="phase-desc">Access the infrastructure of the local real estate market. The MLS is the ultimate database for finding deals and pulling transaction comps.</p>
+              
+              <ul class="task-list" data-phase="5">
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p5-t1" data-duration="2">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Join Local, State, and National (NAR) Boards:</strong> You must become a dues-paying member of your local Realtor Board to gain MLS credentials. <span class="task-duration-label">2 hrs</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p5-t2" data-duration="2">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Subscribe to the MLS:</strong> Pay the setup and subscription fees for the local Multiple Listing Service (MLS) to access active and sold data. <span class="task-duration-label">2 hrs</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p5-t3" data-duration="1">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Obtain Electronic Key (Supra) Access:</strong> Activate a key account (usually on your smartphone) to access lockboxes for property tours and showings on-demand. <span class="task-duration-label">1 hr</span>
+                    </span>
+                  </label>
+                </li>
+              </ul>
+            </div>
+          </details>
+
+          <!-- Phase 6 -->
+          <details class="phase-disclosure" name="curriculum-phases">
+            <summary class="phase-summary">
+              <div class="phase-summary-left">
+                <div class="phase-badge">Phase 6</div>
+                <span class="phase-title">Executing Personal / Investment Deals</span>
+              </div>
+              <div class="phase-summary-right">
+                <span class="phase-time-badge" id="p6-time-left">30 hrs left</span>
+                <span class="phase-progress-text" id="p6-progress">0/3</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </summary>
+            <div class="phase-content">
+              <p class="phase-desc">Represent yourself in your first transaction and correctly apply the commission structure to maximize cash flow and minimize taxes.</p>
+              
+              <ul class="task-list" data-phase="6">
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p6-t1" data-duration="1">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Insert Licensee Disclosure:</strong> You are legally required to disclose your license status in the purchase contract. E.g., *"Buyer is a licensed real estate agent in the State of [State] and is a principal in this transaction."* <span class="task-duration-label">1 hr</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p6-t2" data-duration="4">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Structure the Savings:</strong> Work with your lender and broker to structure your savings: <span class="task-duration-label">4 hrs</span>
+                      <span class="sub-list">
+                        <span>• <strong>Credit toward closing costs:</strong> Applies commission directly to closing costs (reduces cash needed at closing, non-taxable).</span>
+                        <span>• <strong>Commission check:</strong> Receives standard commission check (taxable as income).</span>
+                        <span>• <strong>Sales price reduction:</strong> Negotiates the price down by the commission amount.</span>
+                      </span>
+                    </span>
+                  </label>
+                </li>
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p6-t3" data-duration="25">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Coordinate Escrow & Title:</strong> Use standard real estate purchase contract templates to write your offer, manage negotiations, and oversee title/escrow processes. <span class="task-duration-label">25 hrs</span>
+                    </span>
+                  </label>
+                </li>
+              </ul>
+            </div>
+          </details>
+
+          <!-- Phase 7 -->
+          <details class="phase-disclosure" name="curriculum-phases">
+            <summary class="phase-summary">
+              <div class="phase-summary-left">
+                <div class="phase-badge">Phase 7</div>
+                <span class="phase-title">Scale Investment Portfolio & Maintenance</span>
+              </div>
+              <div class="phase-summary-right">
+                <span class="phase-time-badge" id="p7-time-left">35 hrs left</span>
+                <span class="phase-progress-text" id="p7-progress">0/3</span>
+                <i data-lucide="chevron-down" class="chevron-icon"></i>
+              </div>
+            </summary>
+            <div class="phase-content">
+              <p class="phase-desc">Leverage your licensing tools to analyze investment opportunities, secure deals, and keep your license in active compliance.</p>
+              
+              <ul class="task-list" data-phase="7">
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p7-t1" data-duration="10">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Analyze Deals via Comparative Market Analysis (CMA):</strong> Run queries on the MLS for sold comps in the last 6 months to calculate ARV (After Repair Value) and rental income potential. <span class="task-duration-label">10 hrs</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p7-t2" data-duration="10">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Network for Off-Market Deals:</strong> Use MLS contacts and agent directories to source pocket listings and network with wholesalers. <span class="task-duration-label">10 hrs</span>
+                    </span>
+                  </label>
+                </li>
+                <li class="task-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox" data-task-id="p7-t3" data-duration="15">
+                    <span class="checkmark"></span>
+                    <span class="task-text">
+                      <strong>Complete Continuing Education (CE):</strong> Take state-required CE hours (typically 12–22 hours every 2 years) to keep your license active. If transactions slow down, consider putting the license on "inactive" status to save on annual board dues. <span class="task-duration-label">15 hrs</span>
+                    </span>
+                  </label>
+                </li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      </section>
+      
+      <!-- Tab: Calculator -->
+      <section id="tab-calculator" class="tab-panel">
+        <div class="section-header">
+          <div>
+            <span class="badge">FINANCIAL CALCULATOR</span>
+            <h2>Investment & ROI Calculator</h2>
+          </div>
+        </div>
+        
+        <p class="section-intro">Determine your exact financial returns from getting a real estate license. Adjust the purchase details and license setup fees below to view your net savings.</p>
+        
+        <div class="calculator-container">
+          <!-- Inputs Column -->
+          <div class="calc-card glass-card">
+            <h3>Transaction & Setup Variables</h3>
+            
+            <div class="input-group">
+              <div class="input-label-row">
+                <label for="purchase-price">Target Property Purchase Price</label>
+                <span class="slider-value" id="purchase-price-val">$400,000</span>
+              </div>
+              <input type="range" id="purchase-price" min="100000" max="1500000" step="10000" value="400000">
+            </div>
+            
+            <div class="input-group">
+              <div class="input-label-row">
+                <label for="commission-rate">Buyer's Agent Commission Rate</label>
+                <span class="slider-value" id="commission-rate-val">2.5%</span>
+              </div>
+              <input type="range" id="commission-rate" min="1.0" max="4.0" step="0.1" value="2.5">
+            </div>
+            
+            <div class="input-group">
+              <div class="input-label-row">
+                <label for="broker-split">Brokerage Split (Percentage)</label>
+                <span class="slider-value" id="broker-split-val">0%</span>
+              </div>
+              <input type="range" id="broker-split" min="0" max="50" step="5" value="0">
+              <span class="input-hint">Select 0% for flat-fee / 100% commission brokerages.</span>
+            </div>
+            
+            <div class="input-group">
+              <div class="input-label-row">
+                <label for="broker-flat-fee">Brokerage Flat Fee per Deal</label>
+                <span class="slider-value" id="broker-flat-fee-val">$250</span>
+              </div>
+              <input type="range" id="broker-flat-fee" min="0" max="1000" step="50" value="250">
+              <span class="input-hint">Or fee paid on personal transactions.</span>
+            </div>
+            
+            <hr class="calc-divider">
+            
+            <h3>Upfront & Maintenance Overhead</h3>
+            
+            <div class="calc-grid-inputs">
+              <div class="calc-input-item">
+                <label for="education-cost">Pre-Licensing Class</label>
+                <div class="input-with-symbol">
+                  <span class="symbol">$</span>
+                  <input type="number" id="education-cost" value="400" min="0">
+                </div>
+              </div>
+              
+              <div class="calc-input-item">
+                <label for="exam-fees">Exam & Application</label>
+                <div class="input-with-symbol">
+                  <span class="symbol">$</span>
+                  <input type="number" id="exam-fees" value="250" min="0">
+                </div>
+              </div>
+              
+              <div class="calc-input-item">
+                <label for="annual-dues">Annual Realtor Dues</label>
+                <div class="input-with-symbol">
+                  <span class="symbol">$</span>
+                  <input type="number" id="annual-dues" value="800" min="0">
+                </div>
+              </div>
+              
+              <div class="calc-input-item">
+                <label for="mls-fees">Annual MLS Subscription</label>
+                <div class="input-with-symbol">
+                  <span class="symbol">$</span>
+                  <input type="number" id="mls-fees" value="600" min="0">
+                </div>
+              </div>
+              
+              <div class="calc-input-item">
+                <label for="eo-insurance">Annual E&O Insurance</label>
+                <div class="input-with-symbol">
+                  <span class="symbol">$</span>
+                  <input type="number" id="eo-insurance" value="400" min="0">
+                </div>
+              </div>
+              
+              <div class="calc-input-item">
+                <label for="tech-fees">Other Annual Fees</label>
+                <div class="input-with-symbol">
+                  <span class="symbol">$</span>
+                  <input type="number" id="tech-fees" value="200" min="0">
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Outputs Column -->
+          <div class="calc-results-wrapper">
+            
+            <!-- Result Main Card -->
+            <div class="calc-card glass-card result-primary-card">
+              <span class="card-subtitle">NET VALUE STATEMENT</span>
+              <h3>First-Year Financial Summary</h3>
+              
+              <div class="big-savings-display">
+                <span class="currency-symbol">$</span>
+                <span class="savings-amount" id="calc-net-savings">7,100</span>
+              </div>
+              <span class="savings-note">Net Savings on First Deal (After Startup Costs)</span>
+              
+              <div class="metrics-grid">
+                <div class="metric-item">
+                  <span class="metric-val text-success" id="calc-gross-comm">$10,000</span>
+                  <span class="metric-lbl">Gross Commission</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-val text-error" id="calc-broker-cut">$250</span>
+                  <span class="metric-lbl">Broker Cut</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-val text-warning" id="calc-startup-costs">$2,650</span>
+                  <span class="metric-lbl">Total Year 1 Costs</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- ROI & Break-even Card -->
+            <div class="calc-card glass-card">
+              <h3>Investment Performance</h3>
+              
+              <div class="roi-bar-container">
+                <div class="roi-label-row">
+                  <span>Return on Education & Licensing Dues</span>
+                  <strong class="text-success" id="calc-roi">268%</strong>
+                </div>
+                <div class="roi-bar-track">
+                  <div class="roi-bar-fill" id="calc-roi-bar" style="width: 100%;"></div>
+                </div>
+              </div>
+              
+              <div class="break-even-container">
+                <div class="icon-text-row">
+                  <i data-lucide="award" class="text-success"></i>
+                  <div>
+                    <strong>Break-even point:</strong> You only need to purchase <strong id="calc-break-even">0.27</strong> properties at this price to fully recover your licensing and board costs in Year 1.
+                  </div>
+                </div>
+              </div>
+              
+              <div class="alert-box note-alert">
+                <i data-lucide="help-circle"></i>
+                <p><strong>Tax Strategy:</strong> If structured as a closing credit or sales price reduction, these savings are typically non-taxable on primary residences. Real estate income received via check is taxable.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Tab: Broker Compare -->
+      <section id="tab-broker-compare" class="tab-panel">
+        <div class="section-header">
+          <div>
+            <span class="badge">SPONSOR INTERVIEW</span>
+            <h2>Selecting an Investor Brokerage</h2>
+          </div>
+        </div>
+        
+        <p class="section-intro">You cannot hold an active license without a sponsoring broker. Use this tool to record notes from broker interviews and compare their fee structures side-by-side.</p>
+        
+        <div class="compare-container">
+          <!-- Interview Guide Card -->
+          <div class="card glass-card">
+            <div class="card-header">
+              <div class="card-icon"><i data-lucide="help-circle"></i></div>
+              <h3>Crucial Questions for Sponsoring Brokers</h3>
+            </div>
+            <div class="card-body">
+              <p class="mb-4">Interviewing a managing broker is a two-way street. Since your goal is transaction savings rather than marketing, focus on these questions:</p>
+              
+              <ul class="question-checklist">
+                <li class="question-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                    <span class="question-text">
+                      <strong>1. Personal Deal Policy:</strong> Do you allow agents to write transactions for themselves, and what is the fee on those deals? (Look for $0 or a small admin fee).
+                    </span>
+                  </label>
+                </li>
+                <li class="question-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                    <span class="question-text">
+                      <strong>2. Monthly Tech/Desk Fees:</strong> Are there recurring fees if I do not close any deals for several months? (Look for low/zero monthly caps).
+                    </span>
+                  </label>
+                </li>
+                <li class="question-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                    <span class="question-text">
+                      <strong>3. Caps & Splits:</strong> Is there a cap on the maximum split you take per year? For 100% firms, what is the flat transaction fee?
+                    </span>
+                  </label>
+                </li>
+                <li class="question-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                    <span class="question-text">
+                      <strong>4. E&O Insurance:</strong> Does your Errors and Omissions policy cover transactions where the agent is a principal (buyer/seller)?
+                    </span>
+                  </label>
+                </li>
+                <li class="question-item">
+                  <label class="checkbox-container">
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                    <span class="question-text">
+                      <strong>5. Part-Time Status:</strong> Do you mandate desk hours, floor time, weekly training, or mandatory meetings? (Look for cloud-based, flexible brokerages).
+                    </span>
+                  </label>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <!-- Side-by-Side Comparison -->
+          <div class="card glass-card">
+            <div class="card-header">
+              <div class="card-icon"><i data-lucide="columns"></i></div>
+              <h3>Broker Comparison Sheet</h3>
+            </div>
+            <div class="card-body">
+              <div class="compare-grid">
+                <!-- Header -->
+                <div class="compare-row compare-header-row">
+                  <div>Criteria</div>
+                  <div>Broker Option A</div>
+                  <div>Broker Option B</div>
+                </div>
+                <!-- Row 1 -->
+                <div class="compare-row">
+                  <div class="criteria-lbl">Brokerage Name</div>
+                  <div><input type="text" id="broker-a-name" value="Flat-Fee Realty" class="table-input"></div>
+                  <div><input type="text" id="broker-b-name" value="Traditional Realty" class="table-input"></div>
+                </div>
+                <!-- Row 2 -->
+                <div class="compare-row">
+                  <div class="criteria-lbl">Commission Split</div>
+                  <div><input type="text" id="broker-a-split" value="100% Agent / 0% Broker" class="table-input"></div>
+                  <div><input type="text" id="broker-b-split" value="70% Agent / 30% Broker" class="table-input"></div>
+                </div>
+                <!-- Row 3 -->
+                <div class="compare-row">
+                  <div class="criteria-lbl">Flat Transaction Fee</div>
+                  <div><input type="text" id="broker-a-flat" value="$350" class="table-input"></div>
+                  <div><input type="text" id="broker-b-flat" value="$0" class="table-input"></div>
+                </div>
+                <!-- Row 4 -->
+                <div class="compare-row">
+                  <div class="criteria-lbl">Monthly Desk/Tech Fee</div>
+                  <div><input type="text" id="broker-a-monthly" value="$50" class="table-input"></div>
+                  <div><input type="text" id="broker-b-monthly" value="$150" class="table-input"></div>
+                </div>
+                <!-- Row 5 -->
+                <div class="compare-row">
+                  <div class="criteria-lbl">Personal Deal Split</div>
+                  <div><input type="text" id="broker-a-personal" value="$150 admin fee (1/year)" class="table-input"></div>
+                  <div><input type="text" id="broker-b-personal" value"Standard 30% split applies" class="table-input"></div>
+                </div>
+                <!-- Row 6 -->
+                <div class="compare-row">
+                  <div class="criteria-lbl">Part-Time Friendly?</div>
+                  <div><input type="text" id="broker-a-parttime" value="Yes - Cloud based" class="table-input"></div>
+                  <div><input type="text" id="broker-b-parttime" value="No - Quotas exist" class="table-input"></div>
+                </div>
+              </div>
+              <div class="compare-notes-section">
+                <label for="broker-notes">Interview Notes & Observations</label>
+                <textarea id="broker-notes" placeholder="Write details about E&O coverage details, broker responsiveness, and local office access here..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Tab: State Guide -->
+      <section id="tab-state-guide" class="tab-panel">
+        <div class="section-header">
+          <div>
+            <span class="badge">STATE BY STATE</span>
+            <h2>State Education & Licensing Directory</h2>
+          </div>
+        </div>
+        
+        <p class="section-intro">Hours and requirements vary significantly by state. Use this lookup tool to find pre-licensing education requirements and licensing portals.</p>
+        
+        <!-- Cross-State Reciprocity Section -->
+        <div class="reciprocity-container glass-card mb-8">
+          <div class="reciprocity-header">
+            <div class="card-icon"><i data-lucide="shuffle"></i></div>
+            <h3>Cross-State Licensing & Reciprocity</h3>
+          </div>
+          <p class="mb-4">If you live in one state but purchase investment properties in another, managing your licenses across state lines is key. Here is how reciprocity works, with a focus on California (CA) and Texas (TX):</p>
+          
+          <div class="reciprocity-split">
+            <!-- CA & TX Specifics -->
+            <div class="reciprocity-column border-right">
+              <h4 class="text-primary"><i data-lucide="arrow-right-left"></i> The CA-TX Border (No Reciprocity)</h4>
+              <p class="reciprocity-info-text">Neither California nor Texas offers reciprocity. To practice in both, you must apply as a new applicant in each state. However, there is one key exam exemption:</p>
+              <ul class="reciprocity-bullets">
+                <li><strong>California Agent getting licensed in Texas:</strong> Texas requires you to complete the 180 hours of education, but allows you to <strong>waive the National portion</strong> of the Texas licensing exam. You only take the Texas State exam.</li>
+                <li><strong>Texas Agent getting licensed in California:</strong> California does not grant any waivers. You must complete the 135 hours of education and pass the entire 150-question California exam.</li>
+                <li><strong>Residency:</strong> Neither state requires local residency. You can apply as a non-resident by submitting an Out-of-State Consent to Service of Process form.</li>
+              </ul>
+            </div>
+            
+            <!-- General Map -->
+            <div class="reciprocity-column">
+              <h4 class="text-secondary"><i data-lucide="globe"></i> National Reciprocity Categories</h4>
+              <div class="reciprocity-categories">
+                <div class="category-block">
+                  <span class="category-badge success">Full Reciprocity</span>
+                  <p>Transfer easily with a state-law exam. (e.g., Colorado, Virginia, Alabama, Mississippi)</p>
+                </div>
+                <div class="category-block">
+                  <span class="category-badge warning">Partial Reciprocity</span>
+                  <p>Reciprocal agreements only exist between specific states. (e.g., Florida, Georgia, Illinois)</p>
+                </div>
+                <div class="category-block">
+                  <span class="category-badge error">No Reciprocity</span>
+                  <p>No recognition of out-of-state licenses. Full course and exams required. (e.g., California, Texas, New York)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="state-search-box glass-card">
+          <i data-lucide="search"></i>
+          <input type="text" id="state-search-input" placeholder="Search state by name or abbreviation (e.g. California, TX, Florida)...">
+        </div>
+        
+        <!-- State Grid -->
+        <div class="state-cards-grid" id="state-cards-grid">
+          <!-- Will be dynamically populated by JS -->
+        </div>
+      </section>
+      
+      <!-- Tab: Resources -->
+      <section id="tab-resources" class="tab-panel">
+        <div class="section-header">
+          <div>
+            <span class="badge">LIBRARY</span>
+            <h2>Curated Resources & Tools</h2>
+          </div>
+        </div>
+        
+        <p class="section-intro">A handpicked compilation of tools, platforms, and legal publications to help you through your licensing path and home buying deals.</p>
+        
+        <div class="resources-grid">
+          <!-- Box 1: Pre-Licensing Schools -->
+          <div class="card glass-card">
+            <div class="card-header">
+              <div class="card-icon"><i data-lucide="book-open"></i></div>
+              <h3>Online Licensing Schools</h3>
+            </div>
+            <div class="card-body">
+              <div class="resource-link-item">
+                <a href="https://www.theceshop.com/" target="_blank" rel="noopener" class="resource-title">
+                  <span>The CE Shop</span>
+                  <i data-lucide="external-link"></i>
+                </a>
+                <p>Academically robust online education with interactive course materials and state-specific exam preps.</p>
+              </div>
+              <div class="resource-link-item">
+                <a href="https://www.aceableagent.com/" target="_blank" rel="noopener" class="resource-title">
+                  <span>AceableAgent</span>
+                  <i data-lucide="external-link"></i>
+                </a>
+                <p>Modern, mobile-first real estate courses with excellent exam prep features and self-paced timelines.</p>
+              </div>
+              <div class="resource-link-item">
+                <a href="https://www.colibrirealestate.com/" target="_blank" rel="noopener" class="resource-title">
+                  <span>Colibri Real Estate</span>
+                  <i data-lucide="external-link"></i>
+                </a>
+                <p>One of the oldest online real estate schools, offering highly flexible and economical pricing plans.</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Box 2: Exam Prep & Study Aids -->
+          <div class="card glass-card">
+            <div class="card-header">
+              <div class="card-icon"><i data-lucide="check-square"></i></div>
+              <h3>Exam Prep Tools</h3>
+            </div>
+            <div class="card-body">
+              <div class="resource-link-item">
+                <a href="https://www.compucram.com/" target="_blank" rel="noopener" class="resource-title">
+                  <span>CompuCram</span>
+                  <i data-lucide="external-link"></i>
+                </a>
+                <p>All-in-one exam prep system that adapts to your learning speed and guides you to exam readiness.</p>
+              </div>
+              <div class="resource-link-item">
+                <a href="https://www.prepagent.com/" target="_blank" rel="noopener" class="resource-title">
+                  <span>PrepAgent</span>
+                  <i data-lucide="external-link"></i>
+                </a>
+                <p>Excellent webinars, vocabulary worksheets, and practice exams. Very popular among candidate agents.</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Box 3: Legal & IRS Tax Guidelines -->
+          <div class="card glass-card">
+            <div class="card-header">
+              <div class="card-icon"><i data-lucide="shield-alert"></i></div>
+              <h3>Tax & Legal Guidelines</h3>
+            </div>
+            <div class="card-body">
+              <div class="resource-link-item">
+                <a href="https://www.irs.gov/pub/irs-wd/1521014.pdf" target="_blank" rel="noopener" class="resource-title">
+                  <span>IRS Private Letter Ruling (Rebates)</span>
+                  <i data-lucide="external-link"></i>
+                </a>
+                <p>Read the official IRS stance holding that commission rebates returned to a buyer reduce the property's cost basis and are not taxable income.</p>
+              </div>
+              <div class="resource-link-item">
+                <a href="https://www.nar.realtor/commission-rebates-broaden-consumer-choice" target="_blank" rel="noopener" class="resource-title">
+                  <span>NAR Guide on Rebates</span>
+                  <i data-lucide="external-link"></i>
+                </a>
+                <p>National Association of Realtors overview of which states allow rebates (40+ states allow them, 10 restrict them).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+    </main>
+  </div>
+  
+  <!-- Initialize Firebase -->
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyCusjgC7nc9ZG1ESTTfbucXpShyRAjddZQ",
+      authDomain: "squirrel-agent.firebaseapp.com",
+      projectId: "squirrel-agent",
+      storageBucket: "squirrel-agent.firebasestorage.app",
+      messagingSenderId: "314343821450",
+      appId: "1:314343821450:web:482e9ed42215b0fb851d73",
+      measurementId: "G-54XQXH9JEY"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
+
+  <script src="app.js?v=1.0.3"></script>
+</body>
+</html>
