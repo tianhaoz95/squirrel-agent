@@ -1,6 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
   <defs>
-    <!-- Logo Gradient matching var(--primary) and var(--secondary) -->
     <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#06b6d4" />
       <stop offset="100%" stop-color="#6366f1" />
