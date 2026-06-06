@@ -1,0 +1,65 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: progress
+// Document ID: {userId} (user's Auth UID)
+// Fields:
+//   - progress: map (required, keys are task IDs e.g. p1-t1, values are booleans) - stores user's learning checklist progress
+//   - updatedAt: timestamp (required) - last modified timestamp
+//
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    // Check if the user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Check if user owns the document (document ID matches auth UID)
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Validate that a timestamp is recent (within 5 minutes)
+    function isRecent(time) {
+      return time is timestamp &&
+             time > request.time - duration.value(5, 'm') &&
+             time <= request.time;
+    }
+
+    // Validate that the document contains only the allowed fields
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+    
+    // Domain Validator for progress documents
+    function isValidProgressDoc() {
+      return hasOnlyAllowedFields(['progress', 'updatedAt']) &&
+             request.resource.data.progress is map &&
+             request.resource.data.progress.keys().size() <= 30 &&
+             isRecent(request.resource.data.updatedAt);
+    }
+
+    // Default deny rule
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Rules for the progress collection
+    match /progress/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidProgressDoc();
+      allow update: if isOwner(userId) && isValidProgressDoc();
+      allow delete: if isOwner(userId);
+    }
+  }
+}

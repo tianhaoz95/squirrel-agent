@@ -1734,6 +1734,85 @@ input[type="range"]::-webkit-slider-thumb:hover {
   border: 1px solid var(--card-border);
 }
 
+/* Auth Panel Styling */
+.auth-panel {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.btn-google-signin {
+  background: linear-gradient(135deg, #4285F4 0%, #34A853 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(66, 133, 244, 0.25) !important;
+  font-size: 0.85rem !important;
+  padding: 10px 16px !important;
+  border: none !important;
+}
+
+.btn-google-signin:hover {
+  box-shadow: 0 6px 20px rgba(66, 133, 244, 0.35) !important;
+  transform: translateY(-2px);
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: rgba(255, 255, 255, 0.02);
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  background-color: var(--bg-tertiary);
+  object-fit: cover;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.user-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-status {
+  font-size: 0.7rem;
+  color: var(--success);
+  font-weight: 500;
+}
+
+.signout-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+}
+
+.signout-btn:hover {
+  color: var(--error);
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
 /* Responsive Breakpoints */
 @media (max-width: 1200px) {
   .dashboard-grid,

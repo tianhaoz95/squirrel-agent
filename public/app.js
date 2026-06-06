@@ -156,7 +156,19 @@ function loadProgress() {
 
 function saveProgress() {
   localStorage.setItem("investor_agent_progress", JSON.stringify(progressData));
+  if (typeof window.onProgressChanged === "function") {
+    window.onProgressChanged(progressData);
+  }
 }
+
+window.applyExternalProgress = (data) => {
+  progressData = data || {};
+  document.querySelectorAll("input[data-task-id]").forEach(cb => {
+    const id = cb.getAttribute("data-task-id");
+    cb.checked = !!progressData[id];
+  });
+  updateProgressUI();
+};
 
 function setupCheckboxes() {
   document.querySelectorAll("input[data-task-id]").forEach(cb => {

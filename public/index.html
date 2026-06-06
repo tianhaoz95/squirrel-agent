@@ -56,6 +56,24 @@
         </div>
       </div>
       
+      <!-- Auth Panel -->
+      <div class="auth-panel" id="auth-panel">
+        <button class="btn btn-primary btn-full-width btn-google-signin" id="btn-login">
+          <i data-lucide="log-in"></i>
+          <span>Sign In with Google</span>
+        </button>
+        <div class="user-profile" id="user-profile" style="display: none;">
+          <img class="user-avatar" id="user-avatar" src="" alt="User Avatar">
+          <div class="user-details">
+            <span class="user-name" id="user-name">Guest</span>
+            <span class="user-status">Syncing to Cloud</span>
+          </div>
+          <button class="signout-btn" id="btn-logout" title="Sign Out">
+            <i data-lucide="log-out"></i>
+          </button>
+        </div>
+      </div>
+      
       <!-- Nav Menu -->
       <nav class="nav-menu" aria-label="Main Navigation">
         <ul class="nav-list">
@@ -1046,11 +1064,10 @@
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
+    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
     const firebaseConfig = {
       apiKey: "AIzaSyCusjgC7nc9ZG1ESTTfbucXpShyRAjddZQ",
       authDomain: "squirrel-agent.firebaseapp.com",
@@ -1064,6 +1081,139 @@
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUser = null;
+    let unsubscribeProgress = null;
+
+    // Elements
+    const btnLogin = document.getElementById("btn-login");
+    const btnLogout = document.getElementById("btn-logout");
+    const userProfile = document.getElementById("user-profile");
+    const userAvatar = document.getElementById("user-avatar");
+    const userName = document.getElementById("user-name");
+
+    // Login action
+    window.signInWithGoogle = async () => {
+      const provider = new GoogleAuthProvider();
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (err) {
+        console.error("Sign in failed:", err);
+      }
+    };
+
+    // Logout action
+    window.signOutFromFirebase = async () => {
+      try {
+        if (unsubscribeProgress) {
+          unsubscribeProgress();
+          unsubscribeProgress = null;
+        }
+        await signOut(auth);
+      } catch (err) {
+        console.error("Sign out failed:", err);
+      }
+    };
+
+    // Bind event listeners
+    if (btnLogin) btnLogin.addEventListener("click", window.signInWithGoogle);
+    if (btnLogout) btnLogout.addEventListener("click", window.signOutFromFirebase);
+
+    // Auth state observer
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        currentUser = user;
+        
+        // Update UI
+        if (userAvatar) userAvatar.src = user.photoURL || "https://lh3.googleusercontent.com/a/default-user=s96-c";
+        if (userName) userName.textContent = user.displayName || "User";
+        if (btnLogin) btnLogin.style.display = "none";
+        if (userProfile) userProfile.style.display = "flex";
+
+        // Start listening to progress updates
+        const docRef = doc(db, "progress", user.uid);
+        
+        // Fetch current document first to merge with local storage
+        try {
+          const docSnap = await getDoc(docRef);
+          let cloudProgress = {};
+          if (docSnap.exists() && docSnap.data().progress) {
+            cloudProgress = docSnap.data().progress;
+          }
+          
+          // Merge local and cloud progress (union of completed tasks)
+          const localProgressStr = localStorage.getItem("investor_agent_progress");
+          let localProgress = {};
+          if (localProgressStr) {
+            try { localProgress = JSON.parse(localProgressStr); } catch (e) {}
+          }
+          
+          // Merge
+          const mergedProgress = { ...localProgress, ...cloudProgress };
+          // If a task is true in either, it's true
+          for (const key in mergedProgress) {
+            mergedProgress[key] = !!(localProgress[key] || cloudProgress[key]);
+          }
+          
+          // Save merged progress to Firestore
+          await setDoc(docRef, {
+            progress: mergedProgress,
+            updatedAt: serverTimestamp()
+          }, { merge: true });
+          
+          // Update local UI
+          if (window.applyExternalProgress) {
+            window.applyExternalProgress(mergedProgress);
+          }
+        } catch (err) {
+          console.error("Error during initial sync:", err);
+        }
+
+        // Setup realtime listener for subsequent changes
+        unsubscribeProgress = onSnapshot(docRef, (snapshot) => {
+          if (snapshot.exists()) {
+            const data = snapshot.data();
+            if (data && data.progress) {
+              // Update local state if different
+              const localProgressStr = localStorage.getItem("investor_agent_progress");
+              if (JSON.stringify(data.progress) !== localProgressStr) {
+                localStorage.setItem("investor_agent_progress", JSON.stringify(data.progress));
+                if (window.applyExternalProgress) {
+                  window.applyExternalProgress(data.progress);
+                }
+              }
+            }
+          }
+        });
+      } else {
+        currentUser = null;
+        if (unsubscribeProgress) {
+          unsubscribeProgress();
+          unsubscribeProgress = null;
+        }
+
+        // Update UI
+        if (btnLogin) btnLogin.style.display = "flex";
+        if (userProfile) userProfile.style.display = "none";
+      }
+    });
+
+    // Handle local progress updates
+    window.onProgressChanged = async (localProgress) => {
+      if (currentUser) {
+        try {
+          const docRef = doc(db, "progress", currentUser.uid);
+          await setDoc(docRef, {
+            progress: localProgress,
+            updatedAt: serverTimestamp()
+          }, { merge: true });
+        } catch (err) {
+          console.error("Error saving progress to Firestore:", err);
+        }
+      }
+    };
   </script>
 
   <script src="app.js?v=1.0.3"></script>
