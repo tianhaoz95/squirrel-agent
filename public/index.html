@@ -115,6 +115,12 @@
               <span>Resources</span>
             </button>
           </li>
+          <li class="nav-item">
+            <button class="nav-link" data-tab="legal">
+              <i data-lucide="shield-alert"></i>
+              <span>Legal & Privacy</span>
+            </button>
+          </li>
         </ul>
       </nav>
       
@@ -1053,6 +1059,54 @@
                 <p>National Association of Realtors overview of which states allow rebates (40+ states allow them, 10 restrict them).</p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Tab: Legal & Privacy -->
+      <section id="tab-legal" class="tab-panel">
+        <div class="section-header">
+          <div>
+            <span class="badge">LEGAL DISCLAIMER & PRIVACY NOTICE</span>
+            <h2>User Agreement & Privacy Notice</h2>
+          </div>
+        </div>
+        
+        <p class="section-intro">Please read this User Agreement and Privacy Notice carefully before using SquirrelAgent.</p>
+        
+        <div class="glass-card mb-8" style="padding: 24px;">
+          <div style="display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; border-bottom: 1px solid var(--card-border); padding-bottom: 16px;">
+            <div class="card-icon" style="background-color: rgba(239, 68, 68, 0.1); color: var(--error); border-color: rgba(239, 68, 68, 0.2);"><i data-lucide="shield-alert"></i></div>
+            <div>
+              <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Informational Purpose Only (FYI)</h3>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">All information, roadmaps, calculator tools, and state requirements provided by SquirrelAgent are for educational and general guidance purposes only. <strong>This website does not provide legal, financial, tax, or real estate brokerage advice.</strong></p>
+            </div>
+          </div>
+          
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; margin-top: 24px;">1. User Agreement & Disclaimer of Warranties</h3>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+            By using this portal, you agree that all contents are provided "as-is" and "as-available" without any representations or warranties. Real estate regulations, pre-licensing hours, state-specific requirements, fees, and reciprocity agreements change frequently and vary by jurisdiction.
+          </p>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+            <strong>No Guarantee of Accuracy:</strong> While we strive to compile accurate directories and roadmaps, we do <strong>not</strong> guarantee or warrant that the information on this website is 100% correct, complete, or up-to-date. You should independently verify all requirements with the relevant state real estate commissions and licensing authorities (such as the CA Department of Real Estate, Texas Real Estate Commission, etc.) before making financial or legal commitments.
+          </p>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+            <strong>Limitation of Liability:</strong> Under no circumstances shall SquirrelAgent, its authors, or contributors be held liable for any direct, indirect, incidental, or consequential damages arising out of your reliance on this roadmap, your representing yourself in real estate transactions, or your application for real estate licensing.
+          </p>
+
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; margin-top: 24px;">2. Privacy Notice</h3>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
+            At SquirrelAgent, we respect your privacy. Here is how we handle user data:
+          </p>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; color: var(--text-secondary); padding: 0; margin-bottom: 24px;">
+            <li style="position: relative; padding-left: 20px; line-height: 1.5;"><strong style="color: var(--text-primary);">Local Storage:</strong> Progress data, broker interview notes, and calculator parameters are saved directly in your web browser's Local Storage for convenience.</li>
+            <li style="position: relative; padding-left: 20px; line-height: 1.5;"><strong style="color: var(--text-primary);">Firebase Authentication & Firestore:</strong> If you choose to sign in using Google Sign-In, we collect your basic profile details (name, email address, profile picture) to identify you. Your roadmap checkboxes, saved progress, and custom values are synced securely to Cloud Firestore so you can access them across multiple devices.</li>
+            <li style="position: relative; padding-left: 20px; line-height: 1.5;"><strong style="color: var(--text-primary);">Data Security:</strong> We enforce secure Firestore rules preventing unauthorized access to your synchronized progress data. We do not sell or share your personal data with third-party advertising brokers or marketers.</li>
+            <li style="position: relative; padding-left: 20px; line-height: 1.5;"><strong style="color: var(--text-primary);">Third-Party Links:</strong> Our resources tab contains links to external pre-licensing schools, state boards, and official publications. We are not responsible for the privacy practices or contents of those external websites.</li>
+          </ul>
+          
+          <div class="note-box" style="margin-top: 24px; padding: 16px; border-radius: 8px; background-color: var(--bg-secondary); border: 1px solid var(--card-border); font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+            If you have any questions or find any licensing requirements out-of-date, please cross-reference with your state's licensing department or submit feedback.
           </div>
         </div>
       </section>
